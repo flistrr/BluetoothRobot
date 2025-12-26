@@ -29,7 +29,7 @@ void loop() {
       case 'J': bluetoothRobot.backRight(); break;
       
       case 'S': bluetoothRobot.stop(); break;
-      case 'Y': bluetoothRobot.horn(); break;
+      case 'Y': bluetoothRobot.buzz(); break;
       case 'U': bluetoothRobot.lightsOn(); break;
       case 'u': bluetoothRobot.lightsOff(); break;
       

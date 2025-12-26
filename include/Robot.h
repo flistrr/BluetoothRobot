@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <AFMotor_R4.h>
+#include "Sound.h"
 
 class Robot
 {
@@ -9,7 +10,8 @@ private:
     AF_DCMotor motorBackLeft;
     AF_DCMotor motorBackRight;
 
-    int pinBuzzer;
+    Sound audio;
+
     int pinHeadLed;
     int pinBackLed;
     int pinFrontSensor;
@@ -30,17 +32,19 @@ public:
 
     void begin(int buzzer, int headLed, int backLed, int frontSensor, int backSensor)
     {
-        pinBuzzer = buzzer;
         pinHeadLed = headLed;
         pinBackLed = backLed;
         pinFrontSensor = frontSensor;
         pinBackSensor = backSensor;
 
-        pinMode(pinBuzzer, OUTPUT);
+        audio.begin(buzzer);
+
         pinMode(pinHeadLed, OUTPUT);
         pinMode(pinBackLed, OUTPUT);
         pinMode(pinFrontSensor, INPUT);
         pinMode(pinBackSensor, INPUT);
+
+        audio.playStartup();
 
         stop();
     }
@@ -68,13 +72,6 @@ public:
         return false;
     }
 
-    void horn()
-    {
-        tone(pinBuzzer, 1000);
-        delay(50);
-        noTone(pinBuzzer);
-    }
-
     void runMotors(uint8_t dir)
     {
         motorFrontLeft.run(dir);
@@ -88,7 +85,7 @@ public:
         if (checkObstacle())
         {
             stop();
-            horn();
+            audio.buzz();
             return;
         }
     }
@@ -179,8 +176,8 @@ public:
         digitalWrite(pinHeadLed, LOW);
     }
 
-    void horn()
+    void buzz()
     {
-        horn();
+        audio.buzz();
     }
 };
